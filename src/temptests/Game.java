@@ -12,10 +12,12 @@ import java.awt.event.*;
  */
 public class Game extends JFrame {
 
-    public static String answerString = "9001";
-    public JLabel answer = new JLabel(answerString);
-    public static double num1 = 0.0;
-    public static double num2 = 0.0;
+    public static String answerString = "0";
+    public static JLabel answer = new JLabel(answerString);
+    public static String[] numStr = new String[100]; //1st num conv to string
+    public static Double[] numDub = new Double[100];  //second number
+    public static int currentNum = 0; //used to know how many numbers have been entered
+    public static String[] functionStr = new String[100];//array of all of the functions that the user wants
     public static JButton b0 = new JButton("0");
     //Creates all necessary buttons for a calculator.
     public static JButton b1 = new JButton("1");
@@ -42,6 +44,7 @@ public class Game extends JFrame {
         JPanel p2 = new JPanel();
         p2.setLayout(new BorderLayout(1, 5));
         p1.setLayout(new GridLayout(5, 3, 0, 0));
+        //adds buttons to the layout/panel
         p1.add(b0);
         b0.addActionListener(new calcButton());
         p1.add(b1);
@@ -83,93 +86,114 @@ public class Game extends JFrame {
     static class calcButton implements ActionListener {
 
         public void actionPerformed(ActionEvent e) {
-            
+
             if (e.getSource() == b0) {
-                if (answerString != "0")
-                    answerString += "0";
-                System.out.println(answerString);
+                if (answerString != "0") {
+                    numStr[currentNum] += "0";
+                }
+                answer.setText(numStr[currentNum]);
             }
             if (e.getSource() == b1) {
-                answerString = "1";
-                total += "1";
-                System.out.println(answerString);
+                numStr[currentNum] += "1";
+                answer.setText(numStr[currentNum]);
             }
             if (e.getSource() == b2) {
-                answerString = "2";
-                total += "2";
-                System.out.println(answerString);
+                numStr[currentNum] += "2";
+                answer.setText(numStr[currentNum]);
             }
             if (e.getSource() == b3) {
-                answerString = "3";
-                total += "3";
-                System.out.println(answerString);
+                numStr[currentNum] += "3";
+                answer.setText(numStr[currentNum]);
             }
             if (e.getSource() == b4) {
-                answerString = "4";
-                total += "4";
-                System.out.println(answerString);
+                numStr[currentNum] += "4";
+                answer.setText(numStr[currentNum]);
             }
             if (e.getSource() == b5) {
-                answerString = "5";
-                total += "5";
-                System.out.println(answerString);
+                numStr[currentNum] += "5";
+                answer.setText(numStr[currentNum]);
             }
             if (e.getSource() == b6) {
-                answerString = "6";
-                total += "6";
-                System.out.println(answerString);
+                numStr[currentNum] += "6";
+                answer.setText(numStr[currentNum]);
             }
             if (e.getSource() == b7) {
-                answerString = "7";
-                total += "7";
-                System.out.println(answerString);
+                numStr[currentNum] += "7";
+                answer.setText(numStr[currentNum]);
             }
             if (e.getSource() == b8) {
-                answerString = "8";
-                total += "8";
-                System.out.println(answerString);
+                numStr[currentNum] += "8";
+                answer.setText(numStr[currentNum]);
             }
             if (e.getSource() == b9) {
-                answerString = "9";
-                total += "9";
-                System.out.println(answerString);
+                numStr[currentNum] += "9";
+                answer.setText(numStr[currentNum]);
             }
-            if (e.getSource() == bPlus) {
-                answerString = "+";
-                System.out.println(answerString);
-            }
-            if (e.getSource() == bMinus) {
-                answerString = "-";
-                System.out.println(answerString);
-            }
-            if (e.getSource() == bDivide) {
-                answerString = "/";
-                System.out.println(answerString);
-            }
-            if (e.getSource() == bTimes) {
-                
+                if (e.getSource() == bPlus) {
+                    if (numStr[currentNum] != "") {
+                        functionStr[currentNum] = "+";
+                        answer.setText(functionStr[currentNum]);
+                    } else {
+                        functionStr[currentNum] = "+";
+                        currentNum += 1;
+                    }
+                }
+                if (e.getSource() == bMinus) {
+                    answerString = "-";
+                    System.out.println(answerString);
+                }
+                if (e.getSource() == bDivide) {
+                    answerString = "/";
+                    System.out.println(answerString);
+                }
+                if (e.getSource() == bTimes) {
+                }
                 if (e.getSource() == bEquals) {
-                    totalDub = num1 * num2;
-                    total = (totalDub).toString();
-                    System.out.println(num1 + "+" + num2 + "=" + total);
-                    System.out.println(total);
+                    int n = 1;
+                    while (n <= (numStr.length)) {
+                        numDub[n] = Double.parseDouble(numStr[n]);
+                        n++;
+                    }
+                    n = 0;
+                    while (n <= numStr.length) {
+                        if (functionStr[n].equals("+")) {
+                            totalDub += numDub[n - 1];
+                        }
+                        if (functionStr[n].equals("-")) {
+                            totalDub -= numDub[n - 1];
+                        }
+                        if (functionStr[n].equals("/")) {
+                            totalDub /= numDub[n - 1];
+                        }
+                        if (functionStr[n].equals("*")) {
+                            totalDub *= numDub[n - 1];
+                        }
+                    }
+                    total = Double.toString(totalDub);
+                    answer.setText(total);
+                    currentNum = 0;
+
+
+                }
+
+                if (e.getSource() == bClear) {
+
+                    currentNum = 1;
+                    answer.setText("0");
+
                 }
             }
-            if (e.getSource() == bClear) {
+        }
 
-                total = "";
-            }
+        public static void game() {
+
+            Game frame = new Game();
+            frame.setTitle("Calculator!");
+            frame.setSize(300, 220);
+            frame.setLocationRelativeTo(null);
+            frame.setVisible(true);
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
         }
     }
 
-    public static void game() {
-
-        Game frame = new Game();
-        frame.setTitle("Calculator!");
-        frame.setSize(300, 220);
-        frame.setLocationRelativeTo(null);
-        frame.setVisible(true);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-    }
-}
